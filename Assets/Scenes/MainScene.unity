@@ -434,6 +434,7 @@ MonoBehaviour:
   spawnDistanceToPlayer: {x: 0, y: 100}
   intervalRandomRange: 10
   spawnPlane: {fileID: 268034280}
+  ennemyObject: {fileID: 1021034596772366858, guid: 7166087c57f18214f9cc1622ff2e3113, type: 3}
 --- !u!64 &268034282
 MeshCollider:
   m_ObjectHideFlags: 0
