@@ -14,13 +14,36 @@ public class EnnemySpawner : MonoBehaviour
 
     [SerializeField]
     GameObject spawnPlane = null; //Spawner
-    void Update()
-    {
-        spawnEnnemy();
-    }
+    [SerializeField]
+    GameObject ennemyObject = null; //Spawner
 
+    private GameObject player = null;
+
+    public void Start()
+    {
+        Debug.Log("SPAWNING ENNEMY START");
+        player = GameObject.FindGameObjectWithTag("Player");
+        StartCoroutine(spawnEnnemy());
+
+    }
     IEnumerator spawnEnnemy()
     {
-        yield return new WaitForSeconds(deltaTime);
+        while (true)
+        {
+            Debug.Log("SPAWNING ENNEMY");
+            Vector2 range = new Vector2(-25, 75);
+
+
+            Vector3 ennemyposition = new Vector3(Random.Range(range.x, range.y), player.transform.position.y, Random.Range(range.y, range.x));
+
+            while (Vector3.Distance(ennemyposition,player.transform.position) < spawnDistanceToPlayer.x || Vector3.Distance(ennemyposition, player.transform.position) > spawnDistanceToPlayer.y)
+            {
+                ennemyposition = new Vector3(Random.Range(range.x, range.y), player.transform.position.y, Random.Range(range.y, range.x));
+            }
+
+            GameObject ennemy = Instantiate(ennemyObject);
+            ennemy.transform.position = ennemyposition;
+            yield return new WaitForSeconds(deltaTime);
+        }
     }
 }
