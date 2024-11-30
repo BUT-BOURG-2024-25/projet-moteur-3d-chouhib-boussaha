@@ -1,25 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class EnnemyMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
     [SerializeField]
-    float moveSpeed = -1f;
-    
-    private GameObject player = null;
+    float moveSpeed = 5f;
+
+    private GameObject player;
+    private Rigidbody rb;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        Vector3 playerPos = new Vector3(player.transform.position.x, this.transform.position.y, player.transform.position.z);
+        if (player == null || rb == null) return;
 
-        gameObject.transform.LookAt(playerPos);
+        Vector3 direction = (player.transform.position - transform.position).normalized;
 
-        transform.position = Vector3.MoveTowards(transform.position,player.transform.position, moveSpeed*Time.deltaTime);
+        rb.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+
+        Vector3 lookDirection = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
+        transform.LookAt(lookDirection);
+
     }
 }
