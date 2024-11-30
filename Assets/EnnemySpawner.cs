@@ -41,6 +41,7 @@ public class EnnemySpawner : MonoBehaviour
                 ennemyposition = new Vector3(Random.Range(range.x, range.y), player.transform.position.y, Random.Range(range.y, range.x));
             }
 
+            ennemyObject.tag = "Ennemy";
             GameObject ennemy = Instantiate(ennemyObject);
             ennemy.transform.position = ennemyposition;
             yield return new WaitForSeconds(deltaTime);
