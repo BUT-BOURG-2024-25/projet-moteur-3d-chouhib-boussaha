@@ -20,7 +20,7 @@ public class LookAtNearestElement : MonoBehaviour
     }
 
 
-    void Update()
+    public void Update()
     {
         if (player == null)
             return;
@@ -30,7 +30,7 @@ public class LookAtNearestElement : MonoBehaviour
 
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            Debug.Log(hitColliders[i].tag);
+            //Debug.Log(hitColliders[i].tag);
 
             if (hitColliders[i].CompareTag("Ennemy") && Vector3.Distance(player.transform.position, hitColliders[i].transform.position)<= minDistance )
             {
@@ -40,7 +40,7 @@ public class LookAtNearestElement : MonoBehaviour
         }
         if (nearest != null)
         {
-            Debug.Log(nearest.transform.position+" "+minDistance);
+            //Debug.Log(nearest.transform.position+" "+minDistance);
             player.transform.LookAt(new Vector3(nearest.transform.position.x, transform.position.y, nearest.transform.position.z));
         }
     }

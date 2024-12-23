@@ -9,13 +9,13 @@ public class EnemyMovement : MonoBehaviour
     private GameObject player;
     private Rigidbody rb;
 
-    void Start()
+    public void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    public void Update()
     {
         if (player == null || rb == null) return;
 

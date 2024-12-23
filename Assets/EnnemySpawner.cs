@@ -10,7 +10,10 @@ public class EnnemySpawner : MonoBehaviour
     Vector2 spawnDistanceToPlayer = Vector2.zero; //Distance de grâce
 
     [SerializeField]
-    float intervalRandomRange = -1f; //Variation par rapport aux paramètres définis par l'aléatoire
+    public int waveEnnemyCount = -1; //Nombre d'ennemies par vague
+
+    [SerializeField]
+    float waveIncreaseFactor = -1f; //Facteur d'augmentation du nombre d'ennemis par vague
 
     [SerializeField]
     GameObject spawnPlane = null; //Spawner
@@ -19,18 +22,26 @@ public class EnnemySpawner : MonoBehaviour
 
     private GameObject player = null;
 
+    int ennemiesSpawned = 0;
+    
+    public int ennemiesLeft = 0;
+    public int waveCount = 0;//Numéro de la vague en cours
+    
     public void Start()
     {
-        Debug.Log("SPAWNING ENNEMY START");
         player = GameObject.FindGameObjectWithTag("Player");
-        StartCoroutine(spawnEnnemy());
-
+        startWave();
     }
+
+    public void Update()
+    {
+        //downEnnemyCount();
+    }
+
     IEnumerator spawnEnnemy()
     {
-        while (true)
+        while (ennemiesSpawned < waveEnnemyCount)
         {
-            Debug.Log("SPAWNING ENNEMY");
             Vector2 range = new Vector2(-25, 75);
 
 
@@ -44,7 +55,36 @@ public class EnnemySpawner : MonoBehaviour
             ennemyObject.tag = "Ennemy";
             GameObject ennemy = Instantiate(ennemyObject);
             ennemy.transform.position = ennemyposition;
+            ennemiesSpawned++;
+
             yield return new WaitForSeconds(deltaTime);
         }
+    }
+
+    //On ennemy death;
+    //Used to trigger wave start
+    public void downEnnemyCount()
+    {
+        //Kill 1 ennemy
+        if (ennemiesLeft > 0)
+        {
+            ennemiesLeft--;
+        }
+        //If no ennemy remains, reset wave
+        if(ennemiesLeft == 0)
+        {
+            startWave();
+        }
+    }
+
+    //Update wave values, (increase ennemy count)
+    private void startWave()
+    {
+            waveCount++;
+            ennemiesSpawned = 0;
+            waveEnnemyCount = (int) (waveEnnemyCount * waveIncreaseFactor)+1;
+            ennemiesLeft = waveEnnemyCount;
+            Debug.Log("Wave "+waveCount+" -- ENNEMIES: " + waveEnnemyCount);
+            StartCoroutine(spawnEnnemy());
     }
 }
