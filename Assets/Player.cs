@@ -70,13 +70,20 @@ public class Player : MonoBehaviour
         //TODO Health increase
     }
 
-    public void attackEnnemy(GameObject ennemy)
+    public void attackEnnemy(GameObject enemy)
     {
         if (this.canAttack)
         {
-            SetCooldown(this.mainWeaponCooldown);
-            Destroy(ennemy);
-            EnnemySpawner.Instance.downEnnemyCount();
+
+            Enemy enemyobject = enemy.GetComponent<Enemy>();
+            if (enemyobject != null)
+            {
+                enemyobject.TakeDamage(this.mainWeaponDamage);
+                SetCooldown(this.mainWeaponCooldown);
+            }
+            else {
+                Debug.Log("null enemy, cant attack (bug)");
+            }
         }
 
     }

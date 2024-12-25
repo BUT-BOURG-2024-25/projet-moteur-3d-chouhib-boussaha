@@ -27,7 +27,7 @@ public class LookAtNearestElement : MonoBehaviour
             return;
         Collider[] hitColliders = Physics.OverlapSphere(player.transform.position, nearRange);
         minDistance = nearRange;
-        nearest = null; //Commenter -> le player continue a regarder l'ennemi le + proche meme si il ne peut pas l'attaquer
+        nearest = null; // le player continue a regarder l'ennemi le + proche meme si il ne peut pas l'attaquer
 
         for (int i = 0; i < hitColliders.Length; i++)
         {
@@ -44,6 +44,7 @@ public class LookAtNearestElement : MonoBehaviour
             //Debug.Log(nearest.transform.position+" "+minDistance);
             player.transform.LookAt(new Vector3(nearest.transform.position.x, transform.position.y, nearest.transform.position.z));
 
+            
             Player.Instance.attackEnnemy(nearest);
         }
     }

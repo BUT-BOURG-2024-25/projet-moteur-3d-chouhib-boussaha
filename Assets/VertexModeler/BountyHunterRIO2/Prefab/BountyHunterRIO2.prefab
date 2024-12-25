@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6218542402859639592}
   - component: {fileID: 6976249845662089636}
   - component: {fileID: 4695783329314748930}
+  - component: {fileID: 8245026628736976540}
   m_Layer: 0
   m_Name: BountyHunterRIO2
   m_TagString: Ennemy
@@ -96,6 +97,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.73, y: 1.7, z: 0.32}
   m_Center: {x: 0, y: 0.9, z: 0.18}
+--- !u!114 &8245026628736976540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021034596772366858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7472732743abc1948a3c90949ea17cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1001 &1219669950743836959
 PrefabInstance:
   m_ObjectHideFlags: 0
