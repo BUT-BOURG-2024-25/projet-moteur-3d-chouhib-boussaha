@@ -5,13 +5,14 @@ using UnityEngine;
 public class LookAtNearestElement : MonoBehaviour
 {
     [SerializeField]
-    float nearRange = -1f;
+    float nearRange = -1f; //Player's range
 
-    GameObject nearest = null;
+    GameObject nearest = null; //Ennemy the player looks at & attacks
 
-    float minDistance;
+    float minDistance; //Used to get the closest ennemy to the player
 
     private GameObject player = null;
+
 
     public void Start()
     {
@@ -42,6 +43,8 @@ public class LookAtNearestElement : MonoBehaviour
         {
             //Debug.Log(nearest.transform.position+" "+minDistance);
             player.transform.LookAt(new Vector3(nearest.transform.position.x, transform.position.y, nearest.transform.position.z));
+
+            Player.Instance.attackEnnemy(nearest);
         }
     }
 }

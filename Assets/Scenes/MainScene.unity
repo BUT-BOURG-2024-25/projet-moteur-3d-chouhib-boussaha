@@ -436,6 +436,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nearRange: 10
+--- !u!114 &64512702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64512694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b9982414792964cb41b1b76bb0cf51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  nextLevelXP: 100
+  mainWeaponDamage: 10
+  mainWeaponCooldown: 2
+  canAttack: 1
 --- !u!1 &135641760
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,14 +528,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135641760}
-  m_LocalRotation: {x: 0.29404032, y: 0, z: 0, w: 0.955793}
-  m_LocalPosition: {x: 20.96, y: 32.1, z: -35.5}
+  m_LocalRotation: {x: 0.41786712, y: 0, z: 0, w: 0.9085082}
+  m_LocalPosition: {x: 24.4, y: 52.7, z: -30.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 34.2, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 49.4, y: 0, z: 0}
 --- !u!1 &268034280
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +574,8 @@ MonoBehaviour:
   waveIncreaseFactor: 1.1
   spawnPlane: {fileID: 268034280}
   ennemyObject: {fileID: 1021034596772366858, guid: 7166087c57f18214f9cc1622ff2e3113, type: 3}
+  ennemiesLeft: 0
+  waveCount: 0
 --- !u!64 &268034282
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1446,7 +1465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 418.1, y: 215.66}
+  m_AnchoredPosition: {x: 433.2, y: 227.11}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1141455283
@@ -1805,6 +1824,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8702267591608313500, guid: e792b5f59bf315845ab4fbb393f59b18, type: 3}
       insertIndex: -1
       addedObject: {fileID: 64512700}
+    - targetCorrespondingSourceObject: {fileID: 8702267591608313500, guid: e792b5f59bf315845ab4fbb393f59b18, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 64512702}
     - targetCorrespondingSourceObject: {fileID: 1485444770936149634, guid: e792b5f59bf315845ab4fbb393f59b18, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2083752031}
@@ -2487,11 +2509,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 80
+      value: 90.20001
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 82.14
+      value: 64.9
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
