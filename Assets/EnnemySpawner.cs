@@ -78,6 +78,7 @@ public class EnnemySpawner : MonoBehaviour
         if (ennemiesLeft > 0)
         {
             ennemiesLeft--;
+            UIManager.Instance.setEnemiesLeft(ennemiesLeft);
             Debug.Log("Wave " + waveCount + " -- ENNEMIES: " + (ennemiesLeft).ToString());
         }
 
@@ -92,10 +93,16 @@ public class EnnemySpawner : MonoBehaviour
     private void startWave()
     {
         waveCount++;
+
         ennemiesSpawned = 0;
         waveEnnemyCount = (int)(waveEnnemyCount * waveIncreaseFactor) + 1;
+
         Debug.Log("Wave " + waveCount + " -- ENNEMIES: " + waveEnnemyCount);
         ennemiesLeft = waveEnnemyCount;
+        
+        UIManager.Instance.setEnemiesLeft(ennemiesLeft);
+        UIManager.Instance.setWaveNumber(waveCount);
+
         StartCoroutine(spawnEnnemy());
     }
 }
