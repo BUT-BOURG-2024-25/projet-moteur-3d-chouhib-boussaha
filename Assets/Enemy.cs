@@ -33,9 +33,36 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+
+            //Die();
             Destroy(gameObject);
             EnnemySpawner.Instance.downEnnemyCount();
         }
+    }
+
+    // j'ai chope ce code dans un video
+    void Die(){
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            /* PlayerStats playerStats = player.GetComponent<PlayerStats>();
+             if (playerStats != null)
+             {
+                 playerStats.AddXP(xpReward); 
+             }
+             else
+             {
+                 Debug.LogError("PlayerStats script is missing on the Player!");
+             }*/
+        }
+        else
+        {
+            Debug.LogError("Player GameObject not found!");
+        }
+
+        Debug.Log("Enemy died!");
+        Destroy(gameObject);
+        EnnemySpawner.Instance.downEnnemyCount();
     }
 
 }
