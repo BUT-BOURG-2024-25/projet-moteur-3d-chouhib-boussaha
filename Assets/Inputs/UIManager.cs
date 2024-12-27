@@ -14,6 +14,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     Text enemiesLeft = null;
 
+    [SerializeField]
+    Scrollbar HPbar = null;
+
     public Vector2 JoystickDirection = Vector2.zero;
 
     public static UIManager Instance { get { return _instance; } }
@@ -32,6 +35,12 @@ public class UIManager : MonoBehaviour
     public void setEnemiesLeft (int enemiesLeft)
     {
         this.enemiesLeft.text = enemiesLeft.ToString();
+    }
+
+    public void setPlayerHP(int playerHP, int playermaxHP)
+    {
+        float coeff = playerHP / playermaxHP;
+
     }
 
     private void Awake()

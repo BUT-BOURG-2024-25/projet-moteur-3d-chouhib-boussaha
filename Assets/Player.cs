@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum WeaponType
 {
@@ -55,11 +57,19 @@ public class Player : MonoBehaviour
             { WeaponType.Auto, autoWeapon },
             { WeaponType.Revolver, revolverWeapon }
         };
+        this.gameObject.tag = "Player";
     }
 
     public void TakeDamage(float damage)
     {
         this.currentHealth -= damage;
+        Debug.Log("Player HP : "+currentHealth);
+
+        if (this.currentHealth <= 0)
+        {
+            Debug.Log("RIP :(");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         //TODO UIMANAGER 
     }
 

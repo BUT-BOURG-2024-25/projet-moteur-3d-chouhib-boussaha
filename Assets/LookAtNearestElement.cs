@@ -40,10 +40,8 @@ public class LookAtNearestElement : MonoBehaviour
         GameObject nearest = getNearestWithinRange(nearRange);
         if (nearest != null)
         {
-            //Debug.Log(nearest.transform.position+" "+minDistance);
             player.transform.LookAt(new Vector3(nearest.transform.position.x, transform.position.y, nearest.transform.position.z));
 
-            
             Player.Instance.DamageEnemy(nearest, WeaponType.Auto);
         }
     }

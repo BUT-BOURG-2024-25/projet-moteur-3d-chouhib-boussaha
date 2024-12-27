@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 
 public class Enemy : MonoBehaviour
 {
@@ -6,9 +10,20 @@ public class Enemy : MonoBehaviour
     private float health = 100f;
     private float currentHealth = 0f;
 
+    [SerializeField]
+    private float moveSpeed = 0;
+
+    [SerializeField]
+    private float damage = 0f;
+    [SerializeField]
+    private float attackCooldown = 0f;
+
+    [SerializeField]
+    private float range = 4f;
+
+    bool canAttack = true;
+
     private SkinnedMeshRenderer renderer;
-
-
 
     public void Start()
     {
@@ -19,6 +34,25 @@ public class Enemy : MonoBehaviour
         }
 
         currentHealth = health;
+    }
+
+
+    public void AttackPlayer()
+    {
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null && canAttack)
+        {
+            Debug.Log("ATTACKING PLAYER");
+            player.GetComponent<Player>().TakeDamage(this.damage);
+            StartCoroutine(CooldownRoutine(this.attackCooldown));
+        }
+    }
+
+    private IEnumerator CooldownRoutine(float cooldownTime)
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(cooldownTime);
+        canAttack = true;
     }
 
     public void TakeDamage(float damage)
@@ -33,15 +67,11 @@ public class Enemy : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-
-            //Die();
-            Destroy(gameObject);
-            EnnemySpawner.Instance.downEnnemyCount();
+            Die();
         }
     }
 
-    // j'ai chope ce code dans un video
-    void Die(){
+    private void Die(){
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
@@ -63,6 +93,16 @@ public class Enemy : MonoBehaviour
         Debug.Log("Enemy died!");
         Destroy(gameObject);
         EnnemySpawner.Instance.downEnnemyCount();
+    }
+
+    public float getMoveSpeed()
+    {
+        return this.moveSpeed;
+    }
+
+    public float getRange()
+    {
+        return this.range;
     }
 
 }
