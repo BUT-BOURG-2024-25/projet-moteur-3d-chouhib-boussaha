@@ -23,7 +23,6 @@ public class EnemyMovement : MonoBehaviour
 
         rb.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
 
-
         Vector3 lookDirection = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
         transform.LookAt(lookDirection);
 

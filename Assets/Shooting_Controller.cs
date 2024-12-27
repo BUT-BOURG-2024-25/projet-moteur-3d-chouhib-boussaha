@@ -11,8 +11,11 @@ public class Shooting_Controller : MonoBehaviour
     private Shoot_Enemies shooting;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+
+
         if (player != null)
         {
             shooting = player.GetComponent<Shoot_Enemies>();
@@ -21,13 +24,14 @@ public class Shooting_Controller : MonoBehaviour
 
         if (shooting != null)
         {
-            ShootingButton.onClick.AddListener(() => shooting.Shoot());
+            ShootingButton.onClick.AddListener(() => shooting.Shoot(player));
         }
     }
 
 
-    void Update()
+    public void Update()
     {
+        /*
         if (player != null)
         {
             // Check for input (e.g., mouse left button or a custom input for shooting)
@@ -45,5 +49,6 @@ public class Shooting_Controller : MonoBehaviour
                 }
             }
         }
+        */
     }
 }

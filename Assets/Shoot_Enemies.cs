@@ -5,33 +5,45 @@ using UnityEngine;
 public class Shoot_Enemies : MonoBehaviour
 {
     [SerializeField] private GameObject bulletPrefab;
-    public Transform shootPoint;
     public float bulletSpeed = 20f;
 
-    public void Shoot()
+    public void Shoot(GameObject player)
     {
-        if (bulletPrefab == null)
+        if (Player.Instance.weapons[WeaponType.Revolver].isReady)
         {
-            Debug.LogError("BulletPrefab is not assigned!");
-            return;
+
+        Enemy enemy = LookAtNearestElement.Instance.getAbsoluteNearest().GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            if (bulletPrefab == null)
+            {
+                Debug.LogError("BulletPrefab is not assigned!");
+                return;
+            }
+
+            if (enemy == null)
+            {
+                Debug.LogError("ShootPoint is not assigned!");
+                return;
+            }
+            
+            Player.Instance.DamageEnemy(enemy.gameObject, WeaponType.Revolver);
+
+                // Instantiate the bullet at the shoot point
+            GameObject bullet = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
+            bullet.transform.localScale = Vector3.one * 25;
+
+            bullet.transform.LookAt(enemy.gameObject.transform.position);
+
+            // Add velocity to the bullet
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.velocity = enemy.transform.forward * bulletSpeed;
+            }
+            //Destroy(bullet, 3f);
+         }
         }
 
-        if (shootPoint == null)
-        {
-            Debug.LogError("ShootPoint is not assigned!");
-            return;
-        }
-
-        // Instantiate the bullet at the shoot point
-        GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
-
-        // Add velocity to the bullet
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = shootPoint.forward * bulletSpeed;
-        }
-
-        Destroy(bullet, 3f);
     }
 }

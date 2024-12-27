@@ -3,36 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType
+{
+    Auto,
+    Revolver,
+    // Add more weapons here
+}
+
+[Serializable]
+public class WeaponProperties
+{
+    public float damage;
+    public float cooldown;
+    public bool isReady = true;
+    public float range;
+}
+
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
-    //Health
-    [SerializeField]
-    private float health = -1f;
-    private float currentHealth = -1f;
+    // Health
+    [SerializeField] private float health = 100f;
+    private float currentHealth = 100f;
 
-    //[SerializeField]
-    //private float healthCoeff = -1f;
-
-    //XP
+    // XP
     private int currentLevel = 1;
     private float currentXP = 0;
 
-    [SerializeField]
-    private float nextLevelXP = -1f;
+    [SerializeField] private float nextLevelXP = 100f;
 
-    //[SerializeField]
-    //private float xpCoeff = -1f;
+    // Weapons
+    [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
+    [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
 
-    //Weapons
-    [SerializeField]
-    private float mainWeaponDamage = -1f;
-
-    [SerializeField]
-    private float mainWeaponCooldown = -1f;
-
-    public bool canAttack = true; //Attack an ennemy when the cd is down and nobody is in range
+    public Dictionary<WeaponType, WeaponProperties> weapons;
 
 
     private void Awake()
@@ -45,18 +50,23 @@ public class Player : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        weapons = new Dictionary<WeaponType, WeaponProperties>
+        {
+            { WeaponType.Auto, autoWeapon },
+            { WeaponType.Revolver, revolverWeapon }
+        };
     }
 
     public void TakeDamage(float damage)
     {
         this.currentHealth -= damage;
+        //TODO UIMANAGER 
     }
 
     public void GainHealth(float health)
     {
         this.currentHealth += health;
     }
-
     public void XpUP(float xp)
     {
         this.currentXP += xp;
@@ -70,34 +80,35 @@ public class Player : MonoBehaviour
         //TODO Health increase
     }
 
-    public void attackEnnemy(GameObject enemy)
+    public void DamageEnemy(GameObject enemy, WeaponType weaponType)
     {
-        if (this.canAttack)
+        if (!weapons[weaponType].isReady)
         {
-
-            Enemy enemyobject = enemy.GetComponent<Enemy>();
-            if (enemyobject != null)
-            {
-                enemyobject.TakeDamage(this.mainWeaponDamage);
-                SetCooldown(this.mainWeaponCooldown);
-            }
-            else {
-                Debug.Log("null enemy, cant attack (bug)");
-            }
+            Debug.Log($"Weapon {weaponType} cooldown : cant attack");
+            return;
         }
 
+        Enemy enemyObject = enemy.GetComponent<Enemy>();
+        if (enemyObject != null)
+        {
+            Debug.Log($"Damaged ennemy using {weaponType} - {weapons[weaponType].damage} dmg");
+            float weaponDamage = weapons[weaponType].damage;
+            if(weaponType== WeaponType.Auto)
+            enemyObject.TakeDamage(weaponDamage);
+            StartCooldown(weaponType);
+        }
     }
 
-    public void SetCooldown(float cooldownTime)
+    private void StartCooldown(WeaponType weaponType)
     {
-        StartCoroutine(CooldownRoutine(cooldownTime));
+        WeaponProperties weapon = weapons[weaponType];
+        weapon.isReady = false;
+        StartCoroutine(CooldownRoutine(weaponType, weapon.cooldown));
     }
 
-    private IEnumerator CooldownRoutine(float cooldownTime)
+    private IEnumerator CooldownRoutine(WeaponType weaponType, float cooldownTime)
     {
-        canAttack = false;
         yield return new WaitForSeconds(cooldownTime);
-        canAttack = true; 
+        weapons[weaponType].isReady = true;
     }
-
 }
