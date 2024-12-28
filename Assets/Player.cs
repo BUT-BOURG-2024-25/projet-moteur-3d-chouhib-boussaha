@@ -84,6 +84,14 @@ public class Player : MonoBehaviour
 
         if (this.currentHealth <= 0)
         {
+
+            SurvivalTimer survivalTimer = FindObjectOfType<SurvivalTimer>();
+            if (survivalTimer != null)
+            {
+                survivalTimer.StopTimer();
+                Debug.Log($"Player survived for: {survivalTimer.GetElapsedTime()} seconds.");
+            }
+
             Debug.Log("RIP :(");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
