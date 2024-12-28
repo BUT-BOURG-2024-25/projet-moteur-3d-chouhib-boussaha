@@ -27,7 +27,8 @@ public class Player : MonoBehaviour
 
 
     // Health
-    [SerializeField] private float health = 100f;
+    [SerializeField] 
+    private float health = 100f;
     private float currentHealth = 100f;
 
     // XP
@@ -74,10 +75,12 @@ public class Player : MonoBehaviour
         //TODO UIMANAGER 
     }
 
-    public void GainHealth(float health)
-    {
-        this.currentHealth += health;
+    public void GainHealth(float healthAmount){
+        currentHealth += healthAmount;
+        currentHealth = Mathf.Min(currentHealth, health); // Ensure health doesn't exceed max
+        Debug.Log($"Player healed! Current Health: {currentHealth}/{health}");
     }
+
     public void XpUP(float xp)
     {
         this.currentXP += xp;
@@ -122,4 +125,8 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(cooldownTime);
         weapons[weaponType].isReady = true;
     }
+
+    public float getHealth(){  return health; }
+
+    public float getCurrentHealth() {  return currentHealth; }
 }

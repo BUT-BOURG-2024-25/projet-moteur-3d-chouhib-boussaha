@@ -27,6 +27,15 @@ public class Medkit : MonoBehaviour
         {
             Debug.Log("Health pack collected!");
 
+            // Heal the player for 30% of their health
+            Player player = Player.Instance;
+            if (player != null)
+            {
+                float healAmount = player.getHealth() * 0.3f; // Calculate 30% of max health
+                player.GainHealth(healAmount);
+                Debug.Log($"Player healed for {healAmount}. Current health: {player.getCurrentHealth()}");
+            }
+
             BuffSpawner spawner = FindObjectOfType<BuffSpawner>();
             if (spawner != null)
             {
