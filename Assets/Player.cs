@@ -41,9 +41,19 @@ public class Player : MonoBehaviour
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
 
+    //Healthbar
+    private HealthBar healthBar;
+
     public Dictionary<WeaponType, WeaponProperties> weapons;
 
-
+    private void Start()
+    {
+        healthBar = FindObjectOfType<HealthBar>();
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(health); // Initialize the health bar
+        }
+    }
     private void Awake()
     {
         if (Instance == null)
@@ -67,6 +77,11 @@ public class Player : MonoBehaviour
         this.currentHealth -= damage;
         Debug.Log("Player HP : "+currentHealth);
 
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealth(currentHealth);
+        }
+
         if (this.currentHealth <= 0)
         {
             Debug.Log("RIP :(");
@@ -78,7 +93,14 @@ public class Player : MonoBehaviour
     public void GainHealth(float healthAmount){
         currentHealth += healthAmount;
         currentHealth = Mathf.Min(currentHealth, health); // Ensure health doesn't exceed max
+
+        if (healthBar != null)
+        {
+            healthBar.UpdateHealth(currentHealth);
+        }
+
         Debug.Log($"Player healed! Current Health: {currentHealth}/{health}");
+
     }
 
     public void XpUP(float xp)
