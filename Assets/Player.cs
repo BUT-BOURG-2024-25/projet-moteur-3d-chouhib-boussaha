@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+
     // Health
     [SerializeField] private float health = 100f;
     private float currentHealth = 100f;
