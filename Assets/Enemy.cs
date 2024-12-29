@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float range = 4f;
 
+    [SerializeField]
+    private float xpReward = 20f;
+
     bool canAttack = true;
 
     private SkinnedMeshRenderer renderer;
@@ -71,19 +74,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Die(){
+    private void Die()
+    {
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
-            /* PlayerStats playerStats = player.GetComponent<PlayerStats>();
-             if (playerStats != null)
-             {
-                 playerStats.AddXP(xpReward); 
-             }
-             else
-             {
-                 Debug.LogError("PlayerStats script is missing on the Player!");
-             }*/
+            Player playerScript = player.GetComponent<Player>();
+            if (playerScript != null)
+            {
+                playerScript.GainXP(xpReward); // Grant XP to the player
+                Debug.Log($"Player gained {xpReward} XP from killing an enemy!");
+            }
+            else
+            {
+                Debug.LogError("Player script not found on the Player GameObject!");
+            }
         }
         else
         {
@@ -92,7 +97,7 @@ public class Enemy : MonoBehaviour
 
         Debug.Log("Enemy died!");
         Destroy(gameObject);
-        EnnemySpawner.Instance.downEnnemyCount();
+        EnnemySpawner.Instance.downEnnemyCount(); // Notify the spawner to decrease enemy count
     }
 
     public float getMoveSpeed()

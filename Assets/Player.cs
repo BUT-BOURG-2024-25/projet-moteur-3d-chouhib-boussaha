@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     private float currentXP = 0;
 
     [SerializeField] private float nextLevelXP = 100f;
+    [SerializeField] private float xpIncreasePerLevel = 1.2f; // Scaling factor for next level XP
 
     // Weapons
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
@@ -43,6 +44,8 @@ public class Player : MonoBehaviour
 
     //Healthbar
     private HealthBar healthBar;
+
+    private XPBar xpBar;
 
     public Dictionary<WeaponType, WeaponProperties> weapons;
 
@@ -53,6 +56,12 @@ public class Player : MonoBehaviour
         {
             healthBar.SetMaxHealth(health); // Initialize the health bar
         }
+        xpBar = FindObjectOfType<XPBar>();
+        if (xpBar != null)
+        {
+            xpBar.SetMaxXP(currentXP); // Initialize the health bar
+        }
+
     }
     private void Awake()
     {
@@ -111,17 +120,35 @@ public class Player : MonoBehaviour
 
     }
 
-    public void XpUP(float xp)
+    public void GainXP(float xp)
     {
-        this.currentXP += xp;
-        if (this.currentXP >= nextLevelXP)
+        currentXP += xp;
+        Debug.Log($"Player gained {xp} XP! Current XP: {currentXP}/{nextLevelXP}");
+
+        if (xpBar != null)
         {
-            this.currentLevel += 1;
-            this.currentXP = nextLevelXP % this.currentXP;
+            xpBar.UpdateXP(currentXP); // Update the XP bar
         }
-        //TODO Reset nextLevelXP
-        //TODO Power up
-        //TODO Health increase
+
+        if (currentXP >= nextLevelXP)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        currentLevel++;
+        currentXP = currentXP - nextLevelXP; // Carry over extra XP
+        nextLevelXP = nextLevelXP * xpIncreasePerLevel; // Scale XP for next level
+
+        Debug.Log($"Level Up! Player is now level {currentLevel}. Next level XP: {nextLevelXP}");
+
+        if (xpBar != null)
+        {
+            xpBar.SetMaxXP(nextLevelXP); // Update the XP bar for the new level
+            xpBar.UpdateXP(currentXP); // Refresh the XP bar
+        }
     }
 
     public void DamageEnemy(GameObject enemy, WeaponType weaponType)
