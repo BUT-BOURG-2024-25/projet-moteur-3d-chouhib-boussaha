@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     Scrollbar HPbar = null;
 
+    [SerializeField]
+    private Text levelText = null;
+
     public Vector2 JoystickDirection = Vector2.zero;
 
     public static UIManager Instance { get { return _instance; } }
@@ -41,6 +44,14 @@ public class UIManager : MonoBehaviour
     {
         float coeff = playerHP / playermaxHP;
 
+    }
+
+    public void SetPlayerLevel(int level)
+    {
+        if (levelText != null)
+        {
+            levelText.text = level.ToString();
+        }
     }
 
     private void Awake()

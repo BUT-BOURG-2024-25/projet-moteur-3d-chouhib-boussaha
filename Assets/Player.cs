@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
             xpBar.SetMaxXP(currentXP); // Initialize the health bar
         }
 
+        UIManager.Instance?.SetPlayerLevel(currentLevel);
     }
     private void Awake()
     {
@@ -126,7 +127,7 @@ public class Player : MonoBehaviour
 
         if (xpBar != null)
         {
-            xpBar.UpdateXP(currentXP); // Update the XP bar
+            xpBar.UpdateXP(currentXP,nextLevelXP); // Update the XP bar
         }
 
         if (currentXP >= nextLevelXP)
@@ -157,8 +158,11 @@ public class Player : MonoBehaviour
         if (xpBar != null)
         {
             xpBar.SetMaxXP(nextLevelXP); // Update the XP bar for the new level
-            xpBar.UpdateXP(currentXP); // Refresh the XP bar
+            xpBar.UpdateXP(currentXP, nextLevelXP); // Refresh the XP bar
         }
+
+        UIManager.Instance?.SetPlayerLevel(currentLevel);
+
     }
 
     public void DamageEnemy(GameObject enemy, WeaponType weaponType)
