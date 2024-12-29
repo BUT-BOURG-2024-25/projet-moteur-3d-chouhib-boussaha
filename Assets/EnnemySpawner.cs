@@ -85,6 +85,7 @@ public class EnnemySpawner : MonoBehaviour
         // If no ennemy remains, reset wave
         if (ennemiesLeft == 0)
         {
+            Enemy.enhanceEnemies();
             startWave();
         }
     }
@@ -99,6 +100,7 @@ public class EnnemySpawner : MonoBehaviour
 
         Debug.Log("Wave " + waveCount + " -- ENNEMIES: " + waveEnnemyCount);
         ennemiesLeft = waveEnnemyCount;
+
         
         UIManager.Instance.setEnemiesLeft(ennemiesLeft);
         UIManager.Instance.setWaveNumber(waveCount);

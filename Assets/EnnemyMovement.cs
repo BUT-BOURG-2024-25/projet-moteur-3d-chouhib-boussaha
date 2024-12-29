@@ -32,8 +32,6 @@ public class EnemyMovement : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(enemy.transform.position, enemy.getRange());
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            Debug.Log(hitColliders[i].gameObject.tag);
-
             if (hitColliders[i].CompareTag("PlayerCollider")) //;(
             {
                 enemy.AttackPlayer();

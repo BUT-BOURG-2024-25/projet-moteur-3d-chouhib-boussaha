@@ -1,32 +1,39 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
-    private float health = 100f;
+    static private float health = 100f;
     private float currentHealth = 0f;
 
-    [SerializeField]
-    private float moveSpeed = 0;
+    static private float moveSpeed = 7;
 
-    [SerializeField]
-    private float damage = 0f;
-    [SerializeField]
-    private float attackCooldown = 0f;
+    
+    static private float damage = 15f;
 
-    [SerializeField]
-    private float range = 4f;
+    static private float attackCooldown = 0.5f;
 
-    [SerializeField]
-    private float xpReward = 20f;
+    static private float range = 3.5f;
+
+    static private float xpReward = 20f;
 
     bool canAttack = true;
 
     private SkinnedMeshRenderer renderer;
+
+
+    static public void enhanceEnemies()
+    {
+        health *= 1.2f;
+        damage *= 1.2f;
+        moveSpeed *= 1.01f;
+        xpReward *= 1.10f;
+    }
+
 
     public void Start()
     {
@@ -45,9 +52,8 @@ public class Enemy : MonoBehaviour
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null && canAttack)
         {
-            Debug.Log("ATTACKING PLAYER");
-            player.GetComponent<Player>().TakeDamage(this.damage);
-            StartCoroutine(CooldownRoutine(this.attackCooldown));
+            player.GetComponent<Player>().TakeDamage(damage);
+            StartCoroutine(CooldownRoutine(attackCooldown));
         }
     }
 
@@ -95,19 +101,20 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Player GameObject not found!");
         }
 
-        Debug.Log("Enemy died!");
         Destroy(gameObject);
         EnnemySpawner.Instance.downEnnemyCount(); // Notify the spawner to decrease enemy count
     }
 
     public float getMoveSpeed()
     {
-        return this.moveSpeed;
+        return moveSpeed;
     }
 
     public float getRange()
     {
-        return this.range;
+        return range;
     }
+
+    
 
 }

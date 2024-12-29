@@ -36,7 +36,6 @@ public class Player : MonoBehaviour
     private float currentXP = 0;
 
     [SerializeField] private float nextLevelXP = 100f;
-    [SerializeField] private float xpIncreasePerLevel = 1.2f; // Scaling factor for next level XP
 
     // Weapons
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
@@ -140,7 +139,18 @@ public class Player : MonoBehaviour
     {
         currentLevel++;
         currentXP = currentXP - nextLevelXP; // Carry over extra XP
-        nextLevelXP = nextLevelXP * xpIncreasePerLevel; // Scale XP for next level
+        nextLevelXP = nextLevelXP * 1.3f;
+
+        //Enhancements
+        this.health *= 1.05f;
+        this.currentHealth *= 1.05f;
+
+
+        foreach (WeaponType weapon in (WeaponType[])Enum.GetValues(typeof(WeaponType)))
+        {
+            weapons[weapon].cooldown *= 0.99f;
+            weapons[weapon].damage *= 1.1f;
+        }
 
         Debug.Log($"Level Up! Player is now level {currentLevel}. Next level XP: {nextLevelXP}");
 
@@ -155,6 +165,7 @@ public class Player : MonoBehaviour
     {
         if (!weapons[weaponType].isReady)
         {
+            if(weaponType != WeaponType.Auto)
             Debug.Log($"Weapon {weaponType} cooldown : cant attack");
             return;
         }
@@ -162,7 +173,6 @@ public class Player : MonoBehaviour
         Enemy enemyObject = enemy.GetComponent<Enemy>();
         if (enemyObject != null)
         {
-            Debug.Log($"Damaged ennemy using {weaponType} - {weapons[weaponType].damage} dmg");
             float weaponDamage = weapons[weaponType].damage;
             if(weaponType== WeaponType.Auto)
             enemyObject.TakeDamage(weaponDamage);

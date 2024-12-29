@@ -15,6 +15,7 @@ public class Bomb : MonoBehaviour
     private void Update(){
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
         transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        transform.rotation *= Quaternion.Euler(0, 0.1f, 0);
     }
 
     private void OnTriggerEnter(Collider other)

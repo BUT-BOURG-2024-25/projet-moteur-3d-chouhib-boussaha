@@ -58,14 +58,6 @@ public class BuffSpawner : MonoBehaviour
 
         GameObject buff = Instantiate(buffPrefab, spawnPosition, Quaternion.identity);
 
-        if (buffPrefab == healthPackPrefab) {
-            buff.transform.localScale = new Vector3(3f, 3f, 3f);
-        }
-        else{
-            buff.transform.localScale = new Vector3(10f, 10f, 10f);
-        }
-        
-
         activeBuffs.Add(buff);
         buffQueue.Enqueue(buff);
     }

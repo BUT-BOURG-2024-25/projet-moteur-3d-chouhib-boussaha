@@ -19,6 +19,7 @@ public class Medkit : MonoBehaviour
         // Apply a smooth floating motion using a sine wave
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
         transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        transform.rotation *= Quaternion.Euler(0, 0.1f, 0);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,11 +28,11 @@ public class Medkit : MonoBehaviour
         {
             Debug.Log("Health pack collected!");
 
-            // Heal the player for 30% of their health
             Player player = Player.Instance;
             if (player != null)
             {
-                float healAmount = player.getHealth() * 0.3f; // Calculate 30% of max health
+                // Heal the player for 30% of their max health
+                float healAmount = player.getHealth() * 0.3f;
                 player.GainHealth(healAmount);
                 Debug.Log($"Player healed for {healAmount}. Current health: {player.getCurrentHealth()}");
             }
