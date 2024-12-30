@@ -23,6 +23,9 @@ public class EnnemySpawner : MonoBehaviour
     [SerializeField]
     GameObject ennemyObject = null; // Spawner
 
+    [SerializeField]
+    private GameObject damageTakePrefab; //:(
+
     private GameObject player = null;
 
     int ennemiesSpawned = 0;
@@ -63,6 +66,8 @@ public class EnnemySpawner : MonoBehaviour
             }
 
             ennemyObject.tag = "Ennemy";
+            ennemyObject.GetComponent<Enemy>().damageTakePrefab = damageTakePrefab;
+
             GameObject ennemy = Instantiate(ennemyObject);
             ennemy.transform.position = ennemyPosition;
             ennemiesSpawned++;

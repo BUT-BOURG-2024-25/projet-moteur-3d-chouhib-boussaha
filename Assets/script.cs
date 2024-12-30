@@ -10,9 +10,6 @@ public class Bomb : MonoBehaviour
     public float floatSpeed = 2f;
     private Vector3 startPosition;
 
-
-
-
     private void Start()
     {
         startPosition = transform.position;
@@ -52,7 +49,7 @@ public class Bomb : MonoBehaviour
         {
             if (hitColliders[i].CompareTag("Ennemy"))
             {
-
+                Debug.Log("DAMAGED ENNEMY BOMB");
                 hitColliders[i].GetComponent<Enemy>().TakeDamage(Player.Instance.weapons[WeaponType.Auto].damage * 5);
             }
         }

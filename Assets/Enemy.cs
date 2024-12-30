@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
 
     private SkinnedMeshRenderer renderer;
 
+    public GameObject damageTakePrefab;
+    private GameObject damageEffect;
 
     static public void enhanceEnemies()
     {
@@ -74,10 +76,29 @@ public class Enemy : MonoBehaviour
 
         renderer.material.color = color;
 
+        if (damageEffect != null)
+        {
+            Destroy(damageEffect);
+        }
+
         if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            damageEffect = GameObject.Instantiate(damageTakePrefab, gameObject.transform.position, gameObject.transform.rotation);
+            damageEffect.transform.localScale *= 4;
+
+            StartCoroutine(DestroydamageEffect());
+
+        }
+    }
+
+    private IEnumerator DestroydamageEffect()
+    {
+        yield return new WaitForSeconds(damageTakePrefab.GetComponent<ParticleSystem>().main.duration);
+        Destroy(damageEffect);
     }
 
     private void Die()

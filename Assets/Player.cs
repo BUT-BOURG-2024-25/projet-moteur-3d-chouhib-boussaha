@@ -41,12 +41,18 @@ public class Player : MonoBehaviour
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
 
+
     //Healthbar
     private HealthBar healthBar;
 
     private XPBar xpBar;
 
     public Dictionary<WeaponType, WeaponProperties> weapons;
+
+    [SerializeField]
+    private GameObject autoAnimationPrefab;
+    private GameObject autoEffect;
+
 
     private void Start()
     {
@@ -238,7 +244,17 @@ public class Player : MonoBehaviour
         {
             float weaponDamage = weapons[weaponType].damage;
             if(weaponType== WeaponType.Auto)
-            enemyObject.TakeDamage(weaponDamage);
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+                enemyObject.TakeDamage(weaponDamage);
+                if (autoEffect != null)
+                {
+                    Destroy(autoEffect);
+                }
+                autoEffect = GameObject.Instantiate(autoAnimationPrefab, player.transform.position, player.transform.rotation);
+                autoEffect.transform.localScale *= weapons[WeaponType.Auto].range/5;
+            }
             StartCooldown(weaponType);
         }
     }
@@ -253,9 +269,13 @@ public class Player : MonoBehaviour
     private IEnumerator CooldownRoutine(WeaponType weaponType, float cooldownTime)
     {
         yield return new WaitForSeconds(cooldownTime);
+        if( weaponType == WeaponType.Auto )
+            Destroy(autoEffect);
+
         weapons[weaponType].isReady = true;
     }
 
+   
     public float getHealth(){  return health; }
 
     public float getCurrentHealth() {  return currentHealth; }
