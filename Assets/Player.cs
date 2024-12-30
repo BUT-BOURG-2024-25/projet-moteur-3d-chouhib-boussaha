@@ -163,8 +163,10 @@ public class Player : MonoBehaviour
 
         UIManager.Instance?.SetPlayerLevel(currentLevel);
 
-        FindObjectOfType<LevelUpManager>().TriggerLevelUp();
-
+        if (currentLevel % 2 == 0)
+        {
+            FindObjectOfType<LevelUpManager>().TriggerLevelUp();
+        }
     }
 
     public void ApplyUpgrade(LevelUpUpgrade upgrade)

@@ -28,7 +28,7 @@ public class LevelUpManager : MonoBehaviour
         allUpgrades = new LevelUpUpgrade[]
         {
             //new LevelUpUpgrade { name = "Swift Feet", description = "20% more movement speed", type = LevelUpUpgrade.UpgradeType.MovementSpeed, value = 0.2f },
-            new LevelUpUpgrade { name = "Fast Hands", description = "30% more attack speed", type = LevelUpUpgrade.UpgradeType.AttackSpeed, value = 0.3f },
+            new LevelUpUpgrade { name = "Fast Hands", description = "+30% Attack Speed", type = LevelUpUpgrade.UpgradeType.AttackSpeed, value = 0.3f },
             new LevelUpUpgrade { name = "Tanky", description = "20% more health", type = LevelUpUpgrade.UpgradeType.Health, value = 0.2f },
             new LevelUpUpgrade { name = "Power Strike", description = "20% more damage", type = LevelUpUpgrade.UpgradeType.Damage, value = 0.2f },
             //new LevelUpUpgrade { name = "Second Life", description = "Get a second life", type = LevelUpUpgrade.UpgradeType.SecondLife, value = 1f },

@@ -11,6 +11,13 @@ public class BuffSpawner : MonoBehaviour
     private GameObject bombPrefab; // Prefab for the bomb
 
     [SerializeField]
+    public GameObject explosionPrefab; //:(
+
+    [SerializeField]
+    public GameObject healPrefab; //:(
+
+
+    [SerializeField]
     private Vector2 spawnRange = new Vector2(-25, 75); // X and Z range for spawning buffs
 
     [SerializeField]
@@ -55,8 +62,18 @@ public class BuffSpawner : MonoBehaviour
         );
 
         GameObject buffPrefab = Random.value > 0.5f ? healthPackPrefab : bombPrefab;
+        //GameObject buffPrefab = healthPackPrefab;
 
         GameObject buff = Instantiate(buffPrefab, spawnPosition, Quaternion.identity);
+
+        if (buffPrefab == bombPrefab)
+        {
+            buff.GetComponent<Bomb>().explosionPrefab  = explosionPrefab;
+        }else if(buffPrefab == healthPackPrefab)
+        {
+            buff.GetComponent<Medkit>().healingPrefab = healPrefab;
+
+        }
 
         activeBuffs.Add(buff);
         buffQueue.Enqueue(buff);
