@@ -163,7 +163,64 @@ public class Player : MonoBehaviour
 
         UIManager.Instance?.SetPlayerLevel(currentLevel);
 
+        FindObjectOfType<LevelUpManager>().TriggerLevelUp();
+
     }
+
+    public void ApplyUpgrade(LevelUpUpgrade upgrade)
+    {
+        switch (upgrade.type)
+        {
+            //case LevelUpUpgrade.UpgradeType.MovementSpeed:
+            //    // Increase movement speed by the given percentage
+            //    movementSpeed *= (1 + upgrade.value);
+            //    break;
+
+            case LevelUpUpgrade.UpgradeType.AttackSpeed:
+                // Reduce attack cooldown (increase attack speed)
+                foreach (var weapon in weapons.Values)
+                {
+                    weapon.cooldown *= (1 - upgrade.value);
+                }
+                break;
+
+            case LevelUpUpgrade.UpgradeType.Health:
+                // Increase max health
+                health *= (1 + upgrade.value);
+                currentHealth = health; // Heal to max
+                break;
+
+            case LevelUpUpgrade.UpgradeType.Damage:
+                // Increase weapon damage
+                foreach (var weapon in weapons.Values)
+                {
+                    weapon.damage *= (1 + upgrade.value);
+                }
+                break;
+
+            //case LevelUpUpgrade.UpgradeType.SecondLife:
+            //    // Implement second-life logic (e.g., resurrect the player on death)
+            //    hasSecondLife = true;
+            //    break;
+
+            case LevelUpUpgrade.UpgradeType.Range:
+                // Increase weapon range
+                foreach (var weapon in weapons.Values)
+                {
+                    weapon.range *= (1 + upgrade.value);
+                }
+                break;
+
+            case LevelUpUpgrade.UpgradeType.CooldownReduction:
+                // Reduce cooldowns
+                foreach (var weapon in weapons.Values)
+                {
+                    weapon.cooldown *= (1 - upgrade.value);
+                }
+                break;
+        }
+    }
+
 
     public void DamageEnemy(GameObject enemy, WeaponType weaponType)
     {
