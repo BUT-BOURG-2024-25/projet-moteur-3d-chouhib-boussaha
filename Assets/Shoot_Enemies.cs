@@ -9,9 +9,9 @@ public class Shoot_Enemies : MonoBehaviour
 
     public void Shoot(GameObject player)
     {
-        if (Player.Instance.weapons[WeaponType.Revolver].isReady)
+        if (Player.Instance.weapons[WeaponType.Revolver].isReady && LookAtNearestElement.Instance.getAbsoluteNearest() != null)
         {
-
+        
         Enemy enemy = LookAtNearestElement.Instance.getAbsoluteNearest().GetComponent<Enemy>();
         if (enemy != null)
         {

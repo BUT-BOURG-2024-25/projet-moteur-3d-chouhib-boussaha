@@ -22,18 +22,20 @@ public class LevelUpManager : MonoBehaviour
 
     private bool isPaused = false;
 
+    static public float basePercentageGain = 25f;
+
     private void Start()
     {
         // Define upgrades (this could be set via the Inspector or a data file)
         allUpgrades = new LevelUpUpgrade[]
         {
-            //new LevelUpUpgrade { name = "Swift Feet", description = "20% more movement speed", type = LevelUpUpgrade.UpgradeType.MovementSpeed, value = 0.2f },
-            new LevelUpUpgrade { name = "Fast Hands", description = "+30% Attack Speed", type = LevelUpUpgrade.UpgradeType.AttackSpeed, value = 0.3f },
-            new LevelUpUpgrade { name = "Tanky", description = "20% more health", type = LevelUpUpgrade.UpgradeType.Health, value = 0.2f },
-            new LevelUpUpgrade { name = "Power Strike", description = "20% more damage", type = LevelUpUpgrade.UpgradeType.Damage, value = 0.2f },
-            //new LevelUpUpgrade { name = "Second Life", description = "Get a second life", type = LevelUpUpgrade.UpgradeType.SecondLife, value = 1f },
-            new LevelUpUpgrade { name = "Sniper", description = "15% more range", type = LevelUpUpgrade.UpgradeType.Range, value = 0.15f },
-            new LevelUpUpgrade { name = "Cooldown Mastery", description = "20% cooldown reduction", type = LevelUpUpgrade.UpgradeType.CooldownReduction, value = 0.2f },
+            //new LevelUpUpgrade { name = "Swift Feet", description = "movement speed", type = LevelUpUpgrade.UpgradeType.MovementSpeed},
+            new LevelUpUpgrade { name = "Fast Hands", description = "Attack Speed", type = LevelUpUpgrade.UpgradeType.AttackSpeed},
+            new LevelUpUpgrade { name = "Tanky", description = "Health", type = LevelUpUpgrade.UpgradeType.Health},
+            new LevelUpUpgrade { name = "Power Strike", description = "Damage", type = LevelUpUpgrade.UpgradeType.Damage },
+            //new LevelUpUpgrade { name = "Second Life", description = "Get a second life", type = LevelUpUpgrade.UpgradeType.SecondLife},
+            new LevelUpUpgrade { name = "Sniper", description = "Range", type = LevelUpUpgrade.UpgradeType.Range },
+            new LevelUpUpgrade { name = "Cooldown Mastery", description = "Cooldown Reduction", type = LevelUpUpgrade.UpgradeType.CooldownReduction },
         };
 
         levelUpUI.SetActive(false); // Hide the UI initially
@@ -54,7 +56,7 @@ public class LevelUpManager : MonoBehaviour
         // Update UI
         for (int i = 0; i < upgradeButtons.Length; i++)
         {
-            upgradeDescriptions[i].text = currentChoices[i].description;
+            upgradeDescriptions[i].text = "+" + basePercentageGain.ToString("F2") + "% " + currentChoices[i].description;
             upgradeNames[i].text = currentChoices[i].name; // Assign the icon
             int choiceIndex = i; // Prevent closure issue
             upgradeButtons[i].onClick.RemoveAllListeners();
@@ -74,6 +76,7 @@ public class LevelUpManager : MonoBehaviour
         // Resume the game
         Time.timeScale = 1f;
         isPaused = false;
+        basePercentageGain *= 0.95f;
 
         // Hide the level-up UI
         levelUpUI.SetActive(false);

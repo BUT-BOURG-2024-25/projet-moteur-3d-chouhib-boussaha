@@ -8,7 +8,6 @@ public class LevelUpUpgrade
     public Sprite icon; // Icon for the UI
     public UpgradeType type; // Type of upgrade
 
-    public float value; // The effect value (e.g., 20% speed increase)
 
     public enum UpgradeType
     {

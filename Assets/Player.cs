@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
 
         UIManager.Instance?.SetPlayerLevel(currentLevel);
 
-        if (currentLevel % 2 == 0)
+        if (currentLevel % 3 == 0)
         {
             FindObjectOfType<LevelUpManager>().TriggerLevelUp();
         }
@@ -175,20 +175,20 @@ public class Player : MonoBehaviour
         {
             //case LevelUpUpgrade.UpgradeType.MovementSpeed:
             //    // Increase movement speed by the given percentage
-            //    movementSpeed *= (1 + upgrade.value);
+            //    movementSpeed *= (1 + LevelUpManager.basePercentageGain);
             //    break;
 
             case LevelUpUpgrade.UpgradeType.AttackSpeed:
                 // Reduce attack cooldown (increase attack speed)
                 foreach (var weapon in weapons.Values)
                 {
-                    weapon.cooldown *= (1 - upgrade.value);
+                    weapon.cooldown *= (1 - LevelUpManager.basePercentageGain / 100);
                 }
                 break;
 
             case LevelUpUpgrade.UpgradeType.Health:
                 // Increase max health
-                health *= (1 + upgrade.value);
+                health *= (1 + LevelUpManager.basePercentageGain / 100);
                 currentHealth = health; // Heal to max
                 break;
 
@@ -196,7 +196,7 @@ public class Player : MonoBehaviour
                 // Increase weapon damage
                 foreach (var weapon in weapons.Values)
                 {
-                    weapon.damage *= (1 + upgrade.value);
+                    weapon.damage *= (1 + LevelUpManager.basePercentageGain/100);
                 }
                 break;
 
@@ -209,7 +209,7 @@ public class Player : MonoBehaviour
                 // Increase weapon range
                 foreach (var weapon in weapons.Values)
                 {
-                    weapon.range *= (1 + upgrade.value);
+                    weapon.range *= (1 + LevelUpManager.basePercentageGain / 100);
                 }
                 break;
 
@@ -217,7 +217,7 @@ public class Player : MonoBehaviour
                 // Reduce cooldowns
                 foreach (var weapon in weapons.Values)
                 {
-                    weapon.cooldown *= (1 - upgrade.value);
+                    weapon.cooldown *= (1 - LevelUpManager.basePercentageGain / 100);
                 }
                 break;
         }
