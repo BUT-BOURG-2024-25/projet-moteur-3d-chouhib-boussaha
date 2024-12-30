@@ -49,7 +49,7 @@ public class Bomb : MonoBehaviour
         {
             if (hitColliders[i].CompareTag("Ennemy"))
             {
-                Debug.Log("DAMAGED ENNEMY BOMB");
+                Debug.Log("DAMAGED ENNEMY BOMB");   
                 hitColliders[i].GetComponent<Enemy>().TakeDamage(Player.Instance.weapons[WeaponType.Auto].damage * 5);
             }
         }
