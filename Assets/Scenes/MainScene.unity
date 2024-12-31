@@ -452,7 +452,7 @@ MonoBehaviour:
     range: 15
   revolverWeapon:
     damage: 45
-    cooldown: 4.5
+    cooldown: 4
     isReady: 1
     range: 25
   autoAnimationPrefab: {fileID: 1171201465392465800, guid: 4aa9f30a28a77224ba84b2a2c334c71b, type: 3}
@@ -1405,8 +1405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 375, y: 67}
-  m_SizeDelta: {x: 35, y: 35}
+  m_AnchoredPosition: {x: 375, y: 80}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &544509412
 MonoBehaviour:
@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: df90fc12a0d00ef46af008fc24f43c38, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1881,6 +1881,7 @@ MonoBehaviour:
   enemiesLeft: {fileID: 1579156841}
   HPbar: {fileID: 0}
   levelText: {fileID: 2062219765}
+  ShootingButton: {fileID: 833521744}
   JoystickDirection: {x: 0, y: 0}
 --- !u!4 &721841863
 Transform:
@@ -2186,7 +2187,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.6415094, g: 0.6221275, b: 0.43211105, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 0, b: 0, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:

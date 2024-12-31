@@ -263,14 +263,27 @@ public class Player : MonoBehaviour
     {
         WeaponProperties weapon = weapons[weaponType];
         weapon.isReady = false;
+        if(weaponType == WeaponType.Revolver)
+        {
+            UIManager.Instance.setButtonState(false);
+        }
+
         StartCoroutine(CooldownRoutine(weaponType, weapon.cooldown));
     }
 
     private IEnumerator CooldownRoutine(WeaponType weaponType, float cooldownTime)
     {
         yield return new WaitForSeconds(cooldownTime);
-        if( weaponType == WeaponType.Auto )
-            Destroy(autoEffect);
+
+        switch (weaponType)
+        {
+            case WeaponType.Auto:
+                Destroy(autoEffect);
+                break;
+            case WeaponType.Revolver:
+                UIManager.Instance.setButtonState(true); 
+                break;
+        }
 
         weapons[weaponType].isReady = true;
     }

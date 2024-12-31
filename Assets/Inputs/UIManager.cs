@@ -20,6 +20,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text levelText = null;
 
+
+    [SerializeField]
+    private Button ShootingButton;
+
+
     public Vector2 JoystickDirection = Vector2.zero;
 
     public static UIManager Instance { get { return _instance; } }
@@ -52,6 +57,11 @@ public class UIManager : MonoBehaviour
         {
             levelText.text = level.ToString();
         }
+    }
+
+    public void setButtonState(bool state)
+    {
+        ShootingButton.interactable = state;
     }
 
     private void Awake()
