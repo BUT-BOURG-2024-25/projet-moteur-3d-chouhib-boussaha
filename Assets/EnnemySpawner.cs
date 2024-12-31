@@ -81,7 +81,7 @@ public class EnnemySpawner : MonoBehaviour
 
             
             ennemiesSpawned++;
-            ennemiesLeft++;
+            //ennemiesLeft++;
 
             
             yield return new WaitForSeconds(deltaTime);
