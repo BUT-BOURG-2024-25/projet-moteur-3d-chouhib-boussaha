@@ -459,10 +459,10 @@ MonoBehaviour:
     duration: 0
   stressWeapon:
     damage: 0
-    cooldown: 5
+    cooldown: 30
     isReady: 1
     range: 0
-    duration: 0.75
+    duration: 10
   dodgeWeapon:
     damage: 0
     cooldown: 5
@@ -2546,7 +2546,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 435.31, y: 188}
+  m_AnchoredPosition: {x: 435.31, y: 193}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1141455283
@@ -5500,7 +5500,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 90.20001, y: 67}
+  m_AnchoredPosition: {x: 90.20001, y: 74}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2929252284765425813

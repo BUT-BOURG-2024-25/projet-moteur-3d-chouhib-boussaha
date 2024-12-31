@@ -60,6 +60,10 @@ public class Player : MonoBehaviour
     private GameObject dodgeAnimationPrefab;
     private GameObject dodgeEffect;
 
+    [SerializeField]
+    private GameObject stressAnimationPrefab;
+    private GameObject stressEffect;
+
     private bool targetable = true; //Dodging mechanic
  
 
@@ -85,6 +89,11 @@ public class Player : MonoBehaviour
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             dodgeEffect.transform.position = player.transform.position;
+        }
+        if (stressEffect != null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            stressEffect.transform.position = player.transform.position;
         }
     }
 
@@ -301,7 +310,18 @@ public class Player : MonoBehaviour
         if (weaponType == WeaponType.Stress)
         {
             UIManager.Instance.setStressButtonState(true, false);
+            if (stressEffect != null)
+            {
+                Destroy(stressEffect);
+            }
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+            stressEffect = GameObject.Instantiate(stressAnimationPrefab, player.transform.position, player.transform.rotation);
+            stressEffect.transform.localScale *= 2;
             yield return new WaitForSeconds(weapons[WeaponType.Stress].duration);
+
+            Destroy(stressEffect);
+
             UIManager.Instance.setStressButtonState(false, true);
             putStress(false);
         }
