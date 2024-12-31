@@ -54,29 +54,26 @@ public class BuffSpawner : MonoBehaviour
 
     private void SpawnRandomBuff()
     {
+        // Get a random position within the map bounds
+        Vector3 spawnPosition = MapGenerator.Instance.GetRandomPositionWithinBounds();
 
-        Vector3 spawnPosition = new Vector3(
-            Random.Range(spawnRange.x, spawnRange.y),
-            player.transform.position.y,
-            Random.Range(spawnRange.x, spawnRange.y)
-        );
-
+        // Randomly select a buff prefab
         GameObject buffPrefab = Random.value > 0.5f ? healthPackPrefab : bombPrefab;
-        //GameObject buffPrefab = healthPackPrefab;
 
         GameObject buff = Instantiate(buffPrefab, spawnPosition, Quaternion.identity);
 
         if (buffPrefab == bombPrefab)
         {
-            buff.GetComponent<Bomb>().explosionPrefab  = explosionPrefab;
-        }else if(buffPrefab == healthPackPrefab)
+            buff.GetComponent<Bomb>().explosionPrefab = explosionPrefab;
+        }
+        else if (buffPrefab == healthPackPrefab)
         {
             buff.GetComponent<Medkit>().healingPrefab = healPrefab;
-
         }
 
         activeBuffs.Add(buff);
         buffQueue.Enqueue(buff);
+
     }
 
     public void RemoveBuff(GameObject buff)

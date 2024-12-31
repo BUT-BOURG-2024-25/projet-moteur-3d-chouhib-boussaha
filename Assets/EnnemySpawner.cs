@@ -55,23 +55,35 @@ public class EnnemySpawner : MonoBehaviour
     {
         while (ennemiesSpawned < waveEnnemyCount)
         {
-            Vector2 range = new Vector2(-25, 75);
+            Vector3 ennemyPosition = MapGenerator.Instance.GetRandomPositionWithinBounds(); 
 
-            Vector3 ennemyPosition = new Vector3(Random.Range(range.x, range.y), player.transform.position.y, Random.Range(range.y, range.x));
+            
+            int maxAttempts = 10; 
+            int attempts = 0;
 
-            while (Vector3.Distance(ennemyPosition, player.transform.position) < spawnDistanceToPlayer.x ||
-                   Vector3.Distance(ennemyPosition, player.transform.position) > spawnDistanceToPlayer.y)
+            while ((Vector3.Distance(ennemyPosition, player.transform.position) < spawnDistanceToPlayer.x ||
+                    Vector3.Distance(ennemyPosition, player.transform.position) > spawnDistanceToPlayer.y) &&
+                   attempts < maxAttempts)
             {
-                ennemyPosition = new Vector3(Random.Range(range.x, range.y), player.transform.position.y, Random.Range(range.y, range.x));
+                ennemyPosition = MapGenerator.Instance.GetRandomPositionWithinBounds();
+                attempts++;
             }
 
-            ennemyObject.tag = "Ennemy";
-            ennemyObject.GetComponent<Enemy>().damageTakePrefab = damageTakePrefab;
+            
+            if (attempts == maxAttempts)
+            {
+                Debug.LogWarning("Could not find a valid spawn position for an enemy after multiple attempts.");
+            }
 
-            GameObject ennemy = Instantiate(ennemyObject);
-            ennemy.transform.position = ennemyPosition;
+            
+            GameObject ennemy = Instantiate(ennemyObject, ennemyPosition, Quaternion.identity);
+            ennemy.tag = "Ennemy";
+
+            
             ennemiesSpawned++;
+            ennemiesLeft++;
 
+            
             yield return new WaitForSeconds(deltaTime);
         }
     }
