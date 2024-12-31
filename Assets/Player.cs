@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 
 public enum WeaponType
 {
@@ -10,6 +12,7 @@ public enum WeaponType
     Revolver,
     Stress,
     Dodge,
+    AOESlash
 }
 
 [Serializable]
@@ -43,6 +46,7 @@ public class Player : MonoBehaviour
     [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties stressWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties dodgeWeapon = new WeaponProperties { };
+    [SerializeField] private WeaponProperties aoeslashWeapon = new WeaponProperties { };
 
 
     //Healthbar
@@ -63,6 +67,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject stressAnimationPrefab;
     private GameObject stressEffect;
+
+    [SerializeField]
+    private GameObject aoeslashAnimationPrefab;
+    private GameObject aoeslashEffect;
+    private bool aoeattack = false;
 
     private bool targetable = true; //Dodging mechanic
  
@@ -95,6 +104,26 @@ public class Player : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             stressEffect.transform.position = player.transform.position;
         }
+
+        if (aoeslashEffect != null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            aoeslashEffect.transform.position = player.transform.position;
+            if (aoeattack)
+            {
+                aoeattack = false;
+
+                Collider[] hitColliders = Physics.OverlapSphere(player.transform.position, weapons[WeaponType.AOESlash].range);
+                for (int i = 0; i < hitColliders.Length; i++)
+                {
+                    if (hitColliders[i].CompareTag("Ennemy"))
+                    {
+
+                        this.DamageEnemy(hitColliders[i].gameObject, WeaponType.AOESlash);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -114,6 +143,7 @@ public class Player : MonoBehaviour
             { WeaponType.Revolver, revolverWeapon },
             { WeaponType.Stress, stressWeapon },
             { WeaponType.Dodge, dodgeWeapon },
+            { WeaponType.AOESlash, aoeslashWeapon },
         };
         this.gameObject.tag = "Player";
     }
@@ -275,26 +305,36 @@ public class Player : MonoBehaviour
         Enemy enemyObject = enemy.GetComponent<Enemy>();
         if (enemyObject != null)
         {
-            float weaponDamage = weapons[weaponType].damage;
-            if(weaponType== WeaponType.Auto)
+            if (weaponType == WeaponType.AOESlash)
             {
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+                float weaponDamage = weapons[WeaponType.Auto].damage;
                 enemyObject.TakeDamage(weaponDamage);
-                if (autoEffect != null)
-                {
-                    Destroy(autoEffect);
-                }
-                autoEffect = GameObject.Instantiate(autoAnimationPrefab, player.transform.position, player.transform.rotation);
-                autoEffect.transform.localScale *= weapons[WeaponType.Auto].range/5;
             }
-            StartCooldown(weaponType);
+            else
+            {
+
+                float weaponDamage = weapons[weaponType].damage;
+                if (weaponType == WeaponType.Auto)
+                {
+                    GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+                    enemyObject.TakeDamage(weaponDamage);
+                    if (autoEffect != null)
+                    {
+                        Destroy(autoEffect);
+                    }
+                    autoEffect = GameObject.Instantiate(autoAnimationPrefab, player.transform.position, player.transform.rotation);
+                    autoEffect.transform.localScale *= weapons[WeaponType.Auto].range / 5;
+                }
+                StartCooldown(weaponType);
+            }
         }
     }
 
     private void StartCooldown(WeaponType weaponType)
     {
         WeaponProperties weapon = weapons[weaponType];
+        if(weaponType!=WeaponType.AOESlash)
         weapon.isReady = false;
         if(weaponType == WeaponType.Revolver)
         {
@@ -345,6 +385,33 @@ public class Player : MonoBehaviour
             UIManager.Instance.setDodgeButtonState(false, true);
         }
 
+        else if (weaponType == WeaponType.AOESlash)
+        {
+            if (aoeslashEffect != null)
+            {
+                Destroy(aoeslashEffect);
+            }
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+
+            aoeslashEffect = GameObject.Instantiate(aoeslashAnimationPrefab, player.transform.position, player.transform.rotation);
+            aoeslashEffect.transform.localScale *= 2;
+
+            UIManager.Instance.setAOEButtonState(true, false);
+
+            //Total duration : 4s
+            float ticks =4/weapons[WeaponType.AOESlash].duration;
+
+            for(int i =0; i< ticks; i++)
+            {
+                aoeattack = true;
+                yield return new WaitForSeconds(weapons[WeaponType.AOESlash].duration);
+            }
+            Destroy(aoeslashEffect);
+            weapons[WeaponType.AOESlash].isReady = false;
+            UIManager.Instance.setAOEButtonState(false, true);
+        }
+
         yield return new WaitForSeconds(cooldownTime);
 
         switch (weaponType)
@@ -360,6 +427,9 @@ public class Player : MonoBehaviour
                 break;
             case WeaponType.Dodge:
                 UIManager.Instance.setDodgeButtonState(false, false);
+                break;
+            case WeaponType.AOESlash:
+                UIManager.Instance.setAOEButtonState(false, false);
                 break;
         }
 
@@ -403,6 +473,14 @@ public class Player : MonoBehaviour
         if (weapons[WeaponType.Dodge].isReady)
         {
             StartCooldown(WeaponType.Dodge);
+        }
+    }
+
+    public void useAOESpell()
+    {
+        if (weapons[WeaponType.AOESlash].isReady)
+        {
+            StartCooldown(WeaponType.AOESlash);
         }
     }
 }

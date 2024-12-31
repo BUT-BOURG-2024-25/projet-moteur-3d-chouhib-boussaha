@@ -30,6 +30,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button DodgeButton;
 
+    [SerializeField]
+    private Button AOESlashButton;
+
 
     public Vector2 JoystickDirection = Vector2.zero;
 
@@ -46,6 +49,10 @@ public class UIManager : MonoBehaviour
         if (DodgeButton != null)
         {
             DodgeButton.onClick.AddListener(() => Player.Instance.useDodgeSpell());
+        }
+        if (AOESlashButton != null)
+        {
+            AOESlashButton.onClick.AddListener(() => Player.Instance.useAOESpell());
         }
     }
 
@@ -112,6 +119,21 @@ public class UIManager : MonoBehaviour
         {
             DodgeButton.GetComponent<Image>().color = Color.white;
             DodgeButton.interactable = !cooling_down;
+        }
+    }
+
+    public void setAOEButtonState(bool used, bool cooling_down)
+    {
+
+        if (used)
+        {
+            AOESlashButton.GetComponent<Image>().color = Color.green;
+            AOESlashButton.interactable = false;
+        }
+        else
+        {
+            AOESlashButton.GetComponent<Image>().color = Color.white;
+            AOESlashButton.interactable = !cooling_down;
         }
     }
 
