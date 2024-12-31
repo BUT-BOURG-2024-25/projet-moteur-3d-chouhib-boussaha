@@ -15,12 +15,10 @@ public class Shooting_Controller : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
 
-
         if (player != null)
         {
             shooting = player.GetComponent<Shoot_Enemies>();
         }
-
 
         if (shooting != null)
         {

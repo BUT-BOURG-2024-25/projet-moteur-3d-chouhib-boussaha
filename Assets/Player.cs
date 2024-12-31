@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +8,7 @@ public enum WeaponType
 {
     Auto,
     Revolver,
-    // Add more weapons here
+    Stress
 }
 
 [Serializable]
@@ -19,6 +18,7 @@ public class WeaponProperties
     public float cooldown;
     public bool isReady = true;
     public float range;
+    public float duration = 0;
 }
 
 public class Player : MonoBehaviour
@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     // Weapons
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
+    [SerializeField] private WeaponProperties stressWeapon = new WeaponProperties { };
 
 
     //Healthbar
@@ -82,7 +83,8 @@ public class Player : MonoBehaviour
         weapons = new Dictionary<WeaponType, WeaponProperties>
         {
             { WeaponType.Auto, autoWeapon },
-            { WeaponType.Revolver, revolverWeapon }
+            { WeaponType.Revolver, revolverWeapon },
+            { WeaponType.Stress, stressWeapon }
         };
         this.gameObject.tag = "Player";
     }
@@ -265,7 +267,7 @@ public class Player : MonoBehaviour
         weapon.isReady = false;
         if(weaponType == WeaponType.Revolver)
         {
-            UIManager.Instance.setButtonState(false);
+            UIManager.Instance.setShootingButtonState(false);
         }
 
         StartCoroutine(CooldownRoutine(weaponType, weapon.cooldown));
@@ -273,6 +275,15 @@ public class Player : MonoBehaviour
 
     private IEnumerator CooldownRoutine(WeaponType weaponType, float cooldownTime)
     {
+
+        if (weaponType == WeaponType.Stress)
+        {
+            UIManager.Instance.setStressButtonState(true, false);
+            yield return new WaitForSeconds(weapons[WeaponType.Stress].duration);
+            UIManager.Instance.setStressButtonState(false, true);
+            putStress(false);
+        }
+
         yield return new WaitForSeconds(cooldownTime);
 
         switch (weaponType)
@@ -281,7 +292,10 @@ public class Player : MonoBehaviour
                 Destroy(autoEffect);
                 break;
             case WeaponType.Revolver:
-                UIManager.Instance.setButtonState(true); 
+                UIManager.Instance.setShootingButtonState(true); 
+                break;
+            case WeaponType.Stress:
+                UIManager.Instance.setStressButtonState(false,false);
                 break;
         }
 
@@ -292,4 +306,31 @@ public class Player : MonoBehaviour
     public float getHealth(){  return health; }
 
     public float getCurrentHealth() {  return currentHealth; }
+
+    public void useStressSpell()
+    {
+        if (weapons[WeaponType.Stress].isReady)
+        {
+            putStress(true);
+            StartCooldown(WeaponType.Stress);
+        }
+    }
+
+    public void putStress(bool state)
+    {
+        foreach (WeaponType weapon in (WeaponType[])Enum.GetValues(typeof(WeaponType)))
+        {
+            if (weapon != WeaponType.Stress)
+            {
+                if (state)
+                {
+                    weapons[weapon].cooldown *= 0.6f;
+                }
+                else
+                {
+                    weapons[weapon].cooldown /= 0.6f;
+                }
+            }
+        }
+    }
 }

@@ -24,11 +24,23 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button ShootingButton;
 
+    [SerializeField]
+    private Button StressButton;
+
 
     public Vector2 JoystickDirection = Vector2.zero;
 
     public static UIManager Instance { get { return _instance; } }
     private static UIManager _instance = null;
+
+
+    public void Start()
+    {
+        if (StressButton != null)
+        {
+            StressButton.onClick.AddListener(() => Player.Instance.useStressSpell());
+        }
+    }
 
     public void Update()
     {
@@ -59,10 +71,29 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void setButtonState(bool state)
+    public void setShootingButtonState(bool state)
     {
         ShootingButton.interactable = state;
     }
+
+    public void setStressButtonState(bool used, bool cooling_down)
+    {
+
+        if (used)
+        {
+            Debug.Log("USING STRESS (GREEN)");
+            StressButton.GetComponent<Image>().color = Color.green;
+            StressButton.interactable = false;
+        }
+        else 
+        {
+            Debug.Log("COOLDOWN STRESS (RED)");
+            StressButton.GetComponent<Image>().color = Color.white;
+            StressButton.interactable = !cooling_down;
+        }
+    }
+
+
 
     private void Awake()
 
