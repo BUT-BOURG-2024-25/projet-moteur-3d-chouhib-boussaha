@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Button StressButton;
 
+    [SerializeField]
+    private Button DodgeButton;
+
 
     public Vector2 JoystickDirection = Vector2.zero;
 
@@ -39,6 +42,10 @@ public class UIManager : MonoBehaviour
         if (StressButton != null)
         {
             StressButton.onClick.AddListener(() => Player.Instance.useStressSpell());
+        }
+        if (DodgeButton != null)
+        {
+            DodgeButton.onClick.AddListener(() => Player.Instance.useDodgeSpell());
         }
     }
 
@@ -90,6 +97,21 @@ public class UIManager : MonoBehaviour
             Debug.Log("COOLDOWN STRESS (RED)");
             StressButton.GetComponent<Image>().color = Color.white;
             StressButton.interactable = !cooling_down;
+        }
+    }
+
+    public void setDodgeButtonState(bool used, bool cooling_down)
+    {
+
+        if (used)
+        {
+            DodgeButton.GetComponent<Image>().color = Color.green;
+            DodgeButton.interactable = false;
+        }
+        else
+        {
+            DodgeButton.GetComponent<Image>().color = Color.white;
+            DodgeButton.interactable = !cooling_down;
         }
     }
 

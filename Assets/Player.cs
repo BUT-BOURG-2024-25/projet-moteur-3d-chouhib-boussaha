@@ -8,7 +8,8 @@ public enum WeaponType
 {
     Auto,
     Revolver,
-    Stress
+    Stress,
+    Dodge,
 }
 
 [Serializable]
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
     [SerializeField] private WeaponProperties autoWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties revolverWeapon = new WeaponProperties { };
     [SerializeField] private WeaponProperties stressWeapon = new WeaponProperties { };
+    [SerializeField] private WeaponProperties dodgeWeapon = new WeaponProperties { };
 
 
     //Healthbar
@@ -54,6 +56,12 @@ public class Player : MonoBehaviour
     private GameObject autoAnimationPrefab;
     private GameObject autoEffect;
 
+    [SerializeField]
+    private GameObject dodgeAnimationPrefab;
+    private GameObject dodgeEffect;
+
+    private bool targetable = true; //Dodging mechanic
+ 
 
     private void Start()
     {
@@ -70,6 +78,17 @@ public class Player : MonoBehaviour
 
         UIManager.Instance?.SetPlayerLevel(currentLevel);
     }
+
+    private void Update()
+    {
+     if(dodgeEffect != null)
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            dodgeEffect.transform.position = player.transform.position;
+        }
+    }
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -84,35 +103,38 @@ public class Player : MonoBehaviour
         {
             { WeaponType.Auto, autoWeapon },
             { WeaponType.Revolver, revolverWeapon },
-            { WeaponType.Stress, stressWeapon }
+            { WeaponType.Stress, stressWeapon },
+            { WeaponType.Dodge, dodgeWeapon },
         };
         this.gameObject.tag = "Player";
     }
 
     public void TakeDamage(float damage)
     {
-        this.currentHealth -= damage;
-        Debug.Log("Player HP : "+currentHealth);
-
-        if (healthBar != null)
+        if (targetable)
         {
-            healthBar.UpdateHealth(currentHealth);
-        }
+            this.currentHealth -= damage;
+            Debug.Log("Player HP : " + currentHealth);
 
-        if (this.currentHealth <= 0)
-        {
-
-            SurvivalTimer survivalTimer = FindObjectOfType<SurvivalTimer>();
-            if (survivalTimer != null)
+            if (healthBar != null)
             {
-                survivalTimer.StopTimer();
-                Debug.Log($"Player survived for: {survivalTimer.GetElapsedTime()} seconds.");
+                healthBar.UpdateHealth(currentHealth);
             }
 
-            Debug.Log("RIP :(");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (this.currentHealth <= 0)
+            {
+
+                SurvivalTimer survivalTimer = FindObjectOfType<SurvivalTimer>();
+                if (survivalTimer != null)
+                {
+                    survivalTimer.StopTimer();
+                    Debug.Log($"Player survived for: {survivalTimer.GetElapsedTime()} seconds.");
+                }
+
+                Debug.Log("RIP :(");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
-        //TODO UIMANAGER 
     }
 
     public void GainHealth(float healthAmount){
@@ -283,6 +305,25 @@ public class Player : MonoBehaviour
             UIManager.Instance.setStressButtonState(false, true);
             putStress(false);
         }
+        else if (weaponType == WeaponType.Dodge)
+        {
+            if (dodgeEffect != null)
+            {
+                Destroy(dodgeEffect);
+            }
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+            dodgeEffect = GameObject.Instantiate(dodgeAnimationPrefab, player.transform.position, player.transform.rotation);
+            dodgeEffect.transform.localScale *= 2;
+
+            this.targetable = false;
+            UIManager.Instance.setDodgeButtonState(true, false);
+            yield return new WaitForSeconds(weapons[WeaponType.Dodge].duration);
+            Destroy(dodgeEffect);
+
+            this.targetable = true;
+            UIManager.Instance.setDodgeButtonState(false, true);
+        }
 
         yield return new WaitForSeconds(cooldownTime);
 
@@ -296,6 +337,9 @@ public class Player : MonoBehaviour
                 break;
             case WeaponType.Stress:
                 UIManager.Instance.setStressButtonState(false,false);
+                break;
+            case WeaponType.Dodge:
+                UIManager.Instance.setDodgeButtonState(false, false);
                 break;
         }
 
@@ -331,6 +375,14 @@ public class Player : MonoBehaviour
                     weapons[weapon].cooldown /= 0.6f;
                 }
             }
+        }
+    }
+
+    public void useDodgeSpell()
+    {
+        if (weapons[WeaponType.Dodge].isReady)
+        {
+            StartCooldown(WeaponType.Dodge);
         }
     }
 }
