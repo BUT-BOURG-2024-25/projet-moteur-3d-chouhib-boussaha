@@ -150,31 +150,32 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (targetable)
+        currentHealth -= damage;
+        Debug.Log($"Player HP: {currentHealth}");
+
+        if (healthBar != null)
         {
-            this.currentHealth -= damage;
-            Debug.Log("Player HP : " + currentHealth);
+            healthBar.UpdateHealth(currentHealth);
+        }
 
-            if (healthBar != null)
+        if (currentHealth <= 0 && !GameOverManager.Instance.IsGameOver())
+        {
+            Debug.Log("Player died!");
+
+            // Stop the survival timer and get the elapsed time
+            SurvivalTimer survivalTimer = FindObjectOfType<SurvivalTimer>();
+            float survivalTime = 0f;
+            if (survivalTimer != null)
             {
-                healthBar.UpdateHealth(currentHealth);
+                survivalTimer.StopTimer();
+                survivalTime = survivalTimer.GetElapsedTime();
             }
 
-            if (this.currentHealth <= 0)
-            {
-
-                SurvivalTimer survivalTimer = FindObjectOfType<SurvivalTimer>();
-                if (survivalTimer != null)
-                {
-                    survivalTimer.StopTimer();
-                    Debug.Log($"Player survived for: {survivalTimer.GetElapsedTime()} seconds.");
-                }
-
-                Debug.Log("RIP :(");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+            // Show the game-over popup
+            GameOverManager.Instance.ShowDeathPopup(survivalTime);
         }
     }
+
 
     public void GainHealth(float healthAmount){
         currentHealth += healthAmount;

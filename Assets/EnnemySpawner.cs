@@ -55,38 +55,39 @@ public class EnnemySpawner : MonoBehaviour
     {
         while (ennemiesSpawned < waveEnnemyCount)
         {
-            Vector3 ennemyPosition = MapGenerator.Instance.GetRandomPositionWithinBounds(); 
+            Vector3 ennemyPosition = MapGenerator.Instance.GetRandomPositionWithinBounds();
 
-            
-            int maxAttempts = 10; 
+            int maxAttempts = 10;
             int attempts = 0;
 
-            while ((Vector3.Distance(ennemyPosition, player.transform.position) < spawnDistanceToPlayer.x ||
-                    Vector3.Distance(ennemyPosition, player.transform.position) > spawnDistanceToPlayer.y) &&
+            // Ensure the spawn position is not too close or too far from the player
+            while ((Vector3.Distance(ennemyPosition, player.transform.position) < spawnDistanceToPlayer.x || // Too close
+                    Vector3.Distance(ennemyPosition, player.transform.position) > spawnDistanceToPlayer.y) && // Too far
                    attempts < maxAttempts)
             {
                 ennemyPosition = MapGenerator.Instance.GetRandomPositionWithinBounds();
                 attempts++;
             }
 
-            
+            // If no valid position is found, skip this spawn
             if (attempts == maxAttempts)
             {
                 Debug.LogWarning("Could not find a valid spawn position for an enemy after multiple attempts.");
+                yield return null; // Skip this iteration
+                continue;
             }
 
-            
+            // Spawn the enemy at the valid position
             GameObject ennemy = Instantiate(ennemyObject, ennemyPosition, Quaternion.identity);
             ennemy.tag = "Ennemy";
 
-            
             ennemiesSpawned++;
             //ennemiesLeft++;
 
-            
             yield return new WaitForSeconds(deltaTime);
         }
     }
+
 
     // On ennemy death;
     // Used to trigger wave start
