@@ -313,7 +313,6 @@ public class Player : MonoBehaviour
             }
             else
             {
-
                 float weaponDamage = weapons[weaponType].damage;
                 if (weaponType == WeaponType.Auto)
                 {

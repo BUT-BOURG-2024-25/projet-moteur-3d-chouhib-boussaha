@@ -65,11 +65,14 @@ public class Shoot_Enemies : MonoBehaviour
                 // Instantiate the bullet at the player's position
                 GameObject bullet = Instantiate(bulletPrefab, player.transform.position, Quaternion.identity);
 
+
                 // Scale the bullet (optional)
-                bullet.transform.localScale = Vector3.one;
+                bullet.transform.localScale = Vector3.one *18 ;
 
                 // Make the bullet look at the enemy
                 bullet.transform.LookAt(enemy.transform.position);
+
+                Player.Instance.DamageEnemy(enemy.gameObject, WeaponType.Revolver);
 
                 // Handle bullet movement and collision in this script
                 StartCoroutine(HandleBullet(bullet, enemy));
@@ -100,9 +103,6 @@ public class Shoot_Enemies : MonoBehaviour
                     Enemy enemy = collider.GetComponent<Enemy>();
                     if (enemy != null)
                     {
-                        // Apply damage to the enemy
-                        enemy.TakeDamage(Player.Instance.weapons[WeaponType.Revolver].damage);
-
                         // Destroy the bullet
                         Destroy(bullet);
                         yield break;
